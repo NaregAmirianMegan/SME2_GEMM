@@ -6,6 +6,31 @@ SME2 (Scalable Matrix Extension) and SSVE (Streaming Scalable Vector Extension) 
 ## Approach
 Currently a two phase tiling approach is used. The first level of tiling is meant to allow cache residency of all data involved in further computations. The second level of tiling is aligned to the size and shape of the SME ZA block (2D computation matrix). 
 
+        A (m × k)                                       B (k × n)
+   ┌──────────────────────────┐           ┌──────────────┐
+   │                          │           │              │
+   │   ┌──────────────┐       │           │   ┌──────┐   │
+   │   │   mr × kc    │       │    ×      │   │      │   │
+   │   └──────────────┘       │           │   │ kc×nr│   │
+   │                          │           │   │      │   │
+   └──────────────────────────┘           │   └──────┘   │
+                                          │              │
+                                          └──────────────┘
+                │                                           │
+                └────────────────────►──────────────────────┘
+                                     =
+                               C (m × n)
+                       ┌────────────────────┐
+                       │                    │
+                       │   ┌────────┐       │
+                       │   │mr × nr │       │
+                       │   └────────┘       │
+                       │                    │
+                       └────────────────────┘
+
+Formula:  C_block(mr×nr) = A_block(mr×kc) × B_block(kc×nr)
+
+
 ## Status
 
 This project is in early stages, and currently sits at about 60% utilization of the theoretical peak on an Apple M4 chip. Contributions or suggestions are welcome.
@@ -21,10 +46,10 @@ This project is in early stages, and currently sits at about 60% utilization of 
 ## Build
 - Apple system Clang works best, LLVM Clang optimizations sometimes don't play well with Apple hardware.
 - If using LLVM Clang you must use LLD (LLVM Linker), as the Apple system libraries don't define some optimizations in the way LLVM LLD expects (linkage may fail)
-- TODO: Explicit build information and notes (require at least C++ 14 as some features like std::integer_sequence, std::conditional_t are critical)
+- TODO: Explicit build information and notes (require at least C++ 14 as some features like `std::integer_sequence`, `std::conditional_t` are critical)
 
 ## To Do
-- Improve micro-kernel efficiency to achieve > 2TFLOPS performance. Currently the bottleneck on large matrices appears to be the micro-kernel, which implies we are not
+- Improve micro-kernel efficiency to achieve > `2.5 TFLOPS` for FP32 single thread performance. Currently the bottleneck on large matrices appears to be the micro-kernel, which implies we are not
   overlapping mem-ops and compute-ops as well as we could be.
 - Expand implementation to other data types (FP64, BF16, INTs)
 - Expand robustness of benchmarks and test suite
