@@ -6,30 +6,22 @@ SME2 (Scalable Matrix Extension) and SSVE (Streaming Scalable Vector Extension) 
 ## Approach
 Currently a two phase tiling approach is used. The first level of tiling is meant to allow cache residency of all data involved in further computations. The second level of tiling is aligned to the size and shape of the SME ZA block (2D computation matrix). 
 
-        A (m × k)                                       B (k × n)
-   ┌──────────────────────────┐           ┌──────────────┐
-   │                          │           │              │
-   │   ┌──────────────┐       │           │   ┌──────┐   │
-   │   │   mr × kc    │       │    ×      │   │      │   │
-   │   └──────────────┘       │           │   │ kc×nr│   │
-   │                          │           │   │      │   │
-   └──────────────────────────┘           │   └──────┘   │
-                                          │              │
-                                          └──────────────┘
-                │                                           │
-                └────────────────────►──────────────────────┘
-                                     =
-                               C (m × n)
-                       ┌────────────────────┐
-                       │                    │
-                       │   ┌────────┐       │
-                       │   │mr × nr │       │
-                       │   └────────┘       │
-                       │                    │
-                       └────────────────────┘
-
-Formula:  C_block(mr×nr) = A_block(mr×kc) × B_block(kc×nr)
-
+|TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT|
+|TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT|
+|TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT|
+|TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT|
+|TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT|
+|TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT|
+|TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT|
+|TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT|
+|TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT|
+|TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT|
+|TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT|
+|TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT|
+|TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT|
+|TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT|
+|TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT|
+|TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT|
 
 ## Status
 
