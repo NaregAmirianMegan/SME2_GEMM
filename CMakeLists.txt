@@ -24,15 +24,15 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 # Include directories
-include_directories(src/include)
-include_directories(test/include)
+include_directories(include/sme2_gemm)
+include_directories(include/debug)
 
 # Create a library target for your headers (header-only library)
 add_library(sme2_gemm INTERFACE)
-target_include_directories(sme2_gemm INTERFACE src/include)
+target_include_directories(sme2_gemm INTERFACE include/sme2_gemm)
 
 add_library(gemm_truth INTERFACE)
-target_include_directories(gemm_truth INTERFACE test/include)
+target_include_directories(gemm_truth INTERFACE include/debug)
 
 # If you later add source files, uncomment and modify this:
 # file(GLOB_RECURSE SOURCES "src/*.cpp")
